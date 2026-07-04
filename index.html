@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secret Terminal</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main class="terminal">
+    <div class="topbar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="title">secret-terminal@storage:~</span>
+    </div>
+
+    <section id="loginScreen">
+      <h1>SECRET TERMINAL</h1>
+      <p class="muted">> authorized users only</p>
+
+      <input id="email" type="email" placeholder="email" />
+      <input id="password" type="password" placeholder="password" />
+
+      <button id="loginBtn">login</button>
+      <button id="registerBtn">register</button>
+
+      <p id="authStatus"></p>
+    </section>
+
+    <section id="appScreen" hidden>
+      <div class="command-line">
+        <span class="prompt">root@secret-terminal:~$</span>
+        <span> create_note</span>
+      </div>
+
+      <input id="title" placeholder="název tajného zápisku" />
+      <textarea id="content" placeholder="sem piš svoje triky, commandy, poznámky..."></textarea>
+
+      <button id="saveBtn">save</button>
+      <button id="logoutBtn">logout</button>
+
+      <div class="command-line">
+        <span class="prompt">root@secret-terminal:~$</span>
+        <span> saved_notes</span>
+      </div>
+
+      <div id="notes"></div>
+    </section>
+  </main>
+</body>
+</html>
