@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #102010, #020402 70%);
+  color: #39ff14;
+  font-family: "Courier New", monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.terminal {
+  width: 90%;
+  max-width: 900px;
+  min-height: 600px;
+  background: #050805;
+  border: 1px solid #39ff14;
+  box-shadow: 0 0 30px #39ff1444;
+}
+
+.topbar {
+  background: #101510;
+  padding: 10px;
+  border-bottom: 1px solid #39ff14;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 4px;
+}
+
+.red { background: #ff4b4b; }
+.yellow { background: #ffd84b; }
+.green { background: #39ff14; }
+
+.title {
+  margin-left: 15px;
+  color: #b7ffb0;
+}
+
+section {
+  padding: 25px;
+}
+
+h1 {
+  text-shadow: 0 0 12px #39ff14;
+}
+
+.muted {
+  color: #8aff7a;
+}
+
+input, textarea, button {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 8px 0;
+  padding: 12px;
+  background: #000;
+  color: #39ff14;
+  border: 1px solid #39ff14;
+  font-family: inherit;
+  outline: none;
+}
+
+textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: #39ff14;
+  color: #000;
+}
+
+.command-line {
+  margin: 18px 0 8px;
+}
+
+.prompt {
+  color: #00ffcc;
+}
+
+.note {
+  border: 1px dashed #39ff14;
+  padding: 14px;
+  margin-top: 14px;
+  background: #020502;
+}
+
+.note h3 {
+  margin-top: 0;
+}
+
+.note pre {
+  white-space: pre-wrap;
+}
+
+.delete {
+  border-color: #ff4b4b;
+  color: #ff4b4b;
+}
+
+.delete:hover {
+  background: #ff4b4b;
+  color: #000;
+}
