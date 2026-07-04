@@ -30,23 +30,63 @@
     </section>
 
     <section id="appScreen" hidden>
-      <div class="command-line">
-        <span class="prompt">root@secret-terminal:~$</span>
-        <span> create_note</span>
+      <div class="userbar">
+        <span id="userEmail">user</span>
+        <span id="userRole">member</span>
+        <span id="userPoints">0 pts</span>
+        <button id="logoutBtn">logout</button>
       </div>
-
-      <input id="title" placeholder="název tajného zápisku" />
-      <textarea id="content" placeholder="sem piš svoje triky, commandy, poznámky..."></textarea>
-
-      <button id="saveBtn">save</button>
-      <button id="logoutBtn">logout</button>
 
       <div class="command-line">
         <span class="prompt">root@secret-terminal:~$</span>
-        <span> saved_notes</span>
+        <input id="commandInput" placeholder="slash command: /help" />
       </div>
 
-      <div id="notes"></div>
+      <div id="commandOutput" class="output"></div>
+
+      <div class="grid">
+        <div class="panel">
+          <h2>> new_note</h2>
+          <input id="title" placeholder="název zápisku" />
+          <textarea id="content" placeholder="sem piš svoje triky, commandy, poznámky..."></textarea>
+          <button id="saveBtn">save note</button>
+        </div>
+
+        <div class="panel">
+          <h2>> menu</h2>
+          <button data-cmd="/help">/help</button>
+          <button data-cmd="/notes">/notes</button>
+          <button data-cmd="/events">/events</button>
+          <button data-cmd="/profile">/profile</button>
+          <button data-cmd="/admin">/admin</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>> saved_notes</h2>
+        <input id="searchInput" placeholder="search notes..." />
+        <div id="notes"></div>
+      </div>
+
+      <div class="panel">
+        <h2>> events</h2>
+        <div id="events"></div>
+      </div>
+
+      <div class="panel admin-only" hidden>
+        <h2>> admin_panel</h2>
+        <input id="eventTitle" placeholder="event title" />
+        <textarea id="eventDesc" placeholder="event description / CTF challenge"></textarea>
+        <input id="eventReward" type="number" placeholder="reward points" value="10" />
+        <button id="createEventBtn">create event</button>
+
+        <hr />
+
+        <input id="awardEmail" placeholder="user email" />
+        <input id="awardPoints" type="number" placeholder="points" value="1" />
+        <input id="awardBadge" placeholder="badge name" />
+        <button id="awardBtn">give points + badge</button>
+      </div>
     </section>
   </main>
 </body>
