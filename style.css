@@ -4,15 +4,13 @@ body {
   background: radial-gradient(circle at top, #102010, #020402 70%);
   color: #39ff14;
   font-family: "Courier New", monospace;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .terminal {
   width: 90%;
-  max-width: 900px;
-  min-height: 600px;
+  max-width: 1100px;
+  min-height: 650px;
+  margin: 40px auto;
   background: #050805;
   border: 1px solid #39ff14;
   box-shadow: 0 0 30px #39ff1444;
@@ -45,7 +43,7 @@ section {
   padding: 25px;
 }
 
-h1 {
+h1, h2 {
   text-shadow: 0 0 12px #39ff14;
 }
 
@@ -66,7 +64,7 @@ input, textarea, button {
 }
 
 textarea {
-  min-height: 130px;
+  min-height: 120px;
   resize: vertical;
 }
 
@@ -80,23 +78,53 @@ button:hover {
   color: #000;
 }
 
+.userbar {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px dashed #39ff14;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
 .command-line {
-  margin: 18px 0 8px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  margin: 15px 0;
 }
 
 .prompt {
   color: #00ffcc;
 }
 
-.note {
+.output {
   border: 1px dashed #39ff14;
-  padding: 14px;
-  margin-top: 14px;
+  padding: 12px;
+  min-height: 50px;
+  white-space: pre-wrap;
+  background: #010301;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 15px;
+}
+
+.panel {
+  border: 1px solid #39ff14;
+  padding: 15px;
+  margin-top: 15px;
   background: #020502;
 }
 
-.note h3 {
-  margin-top: 0;
+.note, .event {
+  border: 1px dashed #39ff14;
+  padding: 12px;
+  margin-top: 12px;
 }
 
 .note pre {
@@ -111,4 +139,23 @@ button:hover {
 .delete:hover {
   background: #ff4b4b;
   color: #000;
+}
+
+.badge {
+  display: inline-block;
+  border: 1px solid #39ff14;
+  padding: 3px 7px;
+  margin: 3px;
+}
+
+hr {
+  border: none;
+  border-top: 1px dashed #39ff14;
+  margin: 20px 0;
+}
+
+@media (max-width: 800px) {
+  .grid, .userbar, .command-line {
+    grid-template-columns: 1fr;
+  }
 }
