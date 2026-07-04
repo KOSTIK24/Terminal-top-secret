@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://iuwdigqwlntoktvtwobo.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml1d2RpZ3F3bG50b2t0dnR3b2JvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxNzQ1NDYsImV4cCI6MjA5ODc1MDU0Nn0.bCJ4VRHNK3WBYS630UYzR7d8itRQkj9BxQoiw8o6mag";
+const SUPABASE_ANON_KEY = "SEM_DEJ_SVŮJ_ANON_KEY";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -11,112 +11,184 @@ const authStatus = document.getElementById("authStatus");
 const notes = document.getElementById("notes");
 
 async function checkUser() {
-  const { data } = await supabase.auth.getUser();
+    const { data, error } = await supabase.auth.getUser();
 
-  if (data.user) {
-    loginScreen.hidden = true;
-    appScreen.hidden = false;
-    loadNotes();
-  } else {
-    loginScreen.hidden = false;
-    appScreen.hidden = true;
-  }
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (data.user) {
+        loginScreen.hidden = true;
+        appScreen.hidden = false;
+        loadNotes();
+    } else {
+        loginScreen.hidden = false;
+        appScreen.hidden = true;
+    }
 }
 
 document.getElementById("registerBtn").onclick = async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signUp({ email, password });
+    authStatus.textContent = "";
 
-  authStatus.textContent = error
-    ? "> ERROR: " + error.message
-    : "> ACCOUNT CREATED";
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+    });
+
+    if (error) {
+        console.error(error);
+        authStatus.textContent = "> ERROR: " + error.message;
+        return;
+    }
+
+    console.log(data);
+
+    authStatus.textContent =
+        "> Account created! Check your email if confirmation is enabled.";
+
+    checkUser();
 };
 
 document.getElementById("loginBtn").onclick = async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+    authStatus.textContent = "";
 
-  if (error) {
-    authStatus.textContent = "> ERROR: " + error.message;
-    return;
-  }
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-  checkUser();
+    const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) {
+        console.error(error);
+        authStatus.textContent = "> ERROR: " + error.message;
+        return;
+    }
+
+    authStatus.textContent = "> Login successful.";
+
+    checkUser();
 };
 
 document.getElementById("logoutBtn").onclick = async () => {
-  await supabase.auth.signOut();
-  checkUser();
+
+    await supabase.auth.signOut();
+
+    checkUser();
 };
 
 document.getElementById("saveBtn").onclick = async () => {
-  const { data } = await supabase.auth.getUser();
 
-  const title = document.getElementById("title").value.trim();
-  const content = document.getElementById("content").value.trim();
+    const { data: userData } = await supabase.auth.getUser();
 
-  if (!title || !content) {
-    alert("Vyplň název i obsah.");
-    return;
-  }
+    if (!userData.user) {
+        alert("Not logged in.");
+        return;
+    }
 
-  const { error } = await supabase.from("tricks").insert({
-    user_id: data.user.id,
-    title,
-    content
-  });
+    const title = document.getElementById("title").value.trim();
+    const content = document.getElementById("content").value.trim();
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+    if (!title || !content) {
+        alert("Fill in both title and content.");
+        return;
+    }
 
-  document.getElementById("title").value = "";
-  document.getElementById("content").value = "";
+    const { error } = await supabase
+        .from("tricks")
+        .insert({
+            user_id: userData.user.id,
+            title,
+            content
+        });
 
-  loadNotes();
+    if (error) {
+        console.error(error);
+        alert(error.message);
+        return;
+    }
+
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+
+    loadNotes();
 };
 
 async function loadNotes() {
-  const { data, error } = await supabase
-    .from("tricks")
-    .select("*")
-    .order("created_at", { ascending: false });
 
-  if (error) {
-    notes.innerHTML = "> ERROR: " + error.message;
-    return;
-  }
+    const { data, error } = await supabase
+        .from("tricks")
+        .select("*")
+        .order("created_at", {
+            ascending: false
+        });
 
-  notes.innerHTML = data.map(note => `
-    <div class="note">
-      <h3>> ${escapeHtml(note.title)}</h3>
-      <pre>${escapeHtml(note.content)}</pre>
-      <button class="delete" onclick="deleteNote('${note.id}')">delete</button>
-    </div>
-  `).join("");
+    if (error) {
+        console.error(error);
+        notes.innerHTML = "> ERROR: " + error.message;
+        return;
+    }
+
+    notes.innerHTML = "";
+
+    data.forEach(note => {
+
+        const div = document.createElement("div");
+        div.className = "note";
+
+        div.innerHTML = `
+            <h3>> ${escapeHTML(note.title)}</h3>
+            <pre>${escapeHTML(note.content)}</pre>
+            <button class="delete">delete</button>
+        `;
+
+        div.querySelector("button").onclick = async () => {
+
+            const { error } = await supabase
+                .from("tricks")
+                .delete()
+                .eq("id", note.id);
+
+            if (error) {
+                console.error(error);
+                alert(error.message);
+                return;
+            }
+
+            loadNotes();
+        };
+
+        notes.appendChild(div);
+
+    });
+
 }
 
-window.deleteNote = async id => {
-  await supabase.from("tricks").delete().eq("id", id);
-  loadNotes();
-};
+function escapeHTML(text) {
 
-function escapeHtml(text) {
-  return text.replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  }[char]));
+    return text.replace(/[&<>"']/g, function (m) {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[m];
+
+    });
+
 }
 
 checkUser();
+
+supabase.auth.onAuthStateChange(() => {
+    checkUser();
+});
